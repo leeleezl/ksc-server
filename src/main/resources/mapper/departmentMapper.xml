@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.ksc.dao.DepartmentMapper">
+    <resultMap id="deptMap" type="com.heu.ksc.entity.Department">
+        <result property="id" column="id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="pId" column="p_id"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="level" column="level"/>
+    </resultMap>
+    <select id="allDept" resultMap="deptMap">
+        select id, dept_name, p_id, ancestors, level
+        from department
+        order by level ASC
+    </select>
+
+</mapper>

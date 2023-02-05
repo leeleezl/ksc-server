@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.ksc.dao.MenuMapper">
+
+    <resultMap id="menuMap" type="com.heu.ksc.entity.Menu">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="pId" column="p_id"/>
+        <result property="path" column="path"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="level" column="level"/>
+    </resultMap>
+
+    <select id="menus" resultMap="menuMap">
+        SELECT m.id, m.name,m.p_id,m.path,m.level
+        FROM menu m, user u, user_role ur, role_menu rm
+        WHERE u.id = #{id} and ur.user_id = u.id and ur.role_id = rm.role_id and rm.menu_id = m.id
+        ORDER BY level ASC
+    </select>
+
+    <select id="menuList" resultMap="menuMap">
+        SELECT id, name, p_id, path, ancestors, level
+        from menu order by level asc
+    </select>
+
+</mapper>

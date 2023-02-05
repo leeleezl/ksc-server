@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.ksc.dao.UserMapper">
+
+    <resultMap id="userMap" type="com.heu.ksc.entity.User">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="realName" column="real_name"/>
+        <result property="createTime" column="createTime"/>
+        <result property="contact" column="contact"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="state" column="state"/>
+    </resultMap>
+    <sql id="insertFields">
+        username, password,real_name,state, create_time,contact,dept_id
+    </sql>
+
+    <sql id="selectFields">
+        id, username, password,real_name,state, create_time,contact,dept_id
+    </sql>
+
+    <select id="selectByUsername" resultMap="userMap">
+        select <include refid="selectFields"></include>
+        from user where username = #{username}
+    </select>
+
+    <select id="selectById" resultMap="userMap">
+        select <include refid="selectFields"></include>
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="login" resultMap="userMap">
+        select <include refid="selectFields"/>
+        from user
+        where username = #{username} and password = #{password} and is_delete = 0
+    </select>
+
+    <select id="users" resultMap="userMap">
+        SELECT u.id,u.username,u.real_name,u.create_time,u.contact,u.dept_id, u.state,r.name as role_name, d.dept_name
+        FROM user u, user_role ur, role r, department d
+        WHERE u.username = ur.username and r.id = ur.role_id and u.dept_id = d.id and u.is_delete = 0
+        <if test="queryKey != null and queryKey != ''">
+        and (username like CONCAT('%',#{queryKey},'%')
+        or contact like CONCAT('%',#{queryKey},'%'))
+        </if>
+    </select>
+
+
+    <insert id="insert" parameterType="com.heu.ksc.entity.User">
+        insert into user (<include refid="insertFields"/>)
+        values (#{username},#{password},#{realName},#{state},#{createTime},#{contact},#{deptId})
+    </insert>
+
+
+    <update id="updateStatus" parameterType="com.heu.ksc.entity.User">
+        update user set state = #{state} where id = #{id}
+    </update>
+
+    <update id="edit" parameterType="com.heu.ksc.entity.User">
+        update user set id = #{id}
+        <if test="contact != null and contact != ''">
+            ,contact = #{contact}
+        </if>
+        <if test="realName != null and realName != ''">
+            ,real_name = #{realName}
+        </if>
+        <if test="deptId != null and deptId != ''">
+            ,dept_id = #{deptId}
+        </if>
+        where id = #{id}
+    </update>
+
+    <update id="userRole" parameterType="com.heu.ksc.entity.User">
+        update user_role set role_id = #{role_id} where user_id = #{id}
+    </update>
+
+    <update id="deleteUserById">
+        update user set is_delete = 1 where id = #{id}
+    </update>
+
+
+</mapper>
