@@ -1,9 +1,8 @@
 package com.heu.ksc.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.heu.ksc.entity.Menu;
-import com.heu.ksc.entity.User;
-import com.heu.ksc.service.impl.MenuServiceImpl;
+import com.heu.ksc.entity.Auth;
+import com.heu.ksc.service.impl.AuthServiceImpl;
 import com.heu.ksc.util.AjaxResult;
 import com.heu.ksc.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/sys")
 @CrossOrigin
-public class MenuController {
+public class AuthController {
 
     @Autowired
-    private MenuServiceImpl menuService;
+    private AuthServiceImpl authService;
 
     @Autowired
     private TokenUtil tokenUtil;
@@ -28,14 +27,28 @@ public class MenuController {
     @RequestMapping("/menus")
     @ResponseBody
     public String menus() {
-        List<Menu> menus = menuService.menus(tokenUtil.getLoginUser());
+        List<Auth> menus = authService.menus(tokenUtil.getLoginUser());
         return JSON.toJSONString(AjaxResult.success("查询成功", menus));
     }
     @RequestMapping("/menuList")
     @ResponseBody
     public String menuList() {
-        List<Menu> menuList = menuService.menuList();
+        List<Auth> menuList = authService.menuList();
         return JSON.toJSONString(AjaxResult.success("查询成功", menuList));
+    }
+
+    @RequestMapping("/deleteAuth")
+    @ResponseBody
+    public String deleteById(Integer id) {
+        authService.deleteById(id);
+        return JSON.toJSONString(AjaxResult.success("删除成功"));
+    }
+
+    @RequestMapping("/getAuthTree")
+    @ResponseBody
+    public String getAuthTree() {
+        List<Auth> authTree = authService.showAllAuthTree();
+        return JSON.toJSONString(AjaxResult.success("查询成功",authTree));
     }
 
 }

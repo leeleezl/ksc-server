@@ -2,9 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.heu.ksc.dao.UserRoleMapper">
+    <resultMap id="userRoleMap" type="com.heu.ksc.entity.UserRole">
+        <result property="id" column="id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="username" column="username"/>
+    </resultMap>
 
     <insert id="insertUserRole">
         insert into user_role(username, role_id) values(#{username}, #{roleId})
     </insert>
+
+    <update id="updateUserRole" parameterType="com.heu.ksc.entity.UserRole">
+        update user_role set role_id = #{roleId} where username = #{username}
+    </update>
+
+    <select id="selectUserRoleByUsername" resultMap="userRoleMap">
+        select id, role_id, username from user_role where username = #{username}
+    </select>
+
 
 </mapper>

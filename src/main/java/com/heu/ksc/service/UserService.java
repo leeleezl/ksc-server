@@ -1,6 +1,7 @@
 package com.heu.ksc.service;
 
 import com.heu.ksc.entity.User;
+import com.heu.ksc.entity.UserRole;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public interface UserService {
     User selectById(Integer id);
 
     void deleteUserById(Integer id);
+
+    UserRole selectUserRoleByUsername(String username);
 
 
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.heu.ksc.dao.UserMapper;
 import com.heu.ksc.dao.UserRoleMapper;
 import com.heu.ksc.entity.User;
+import com.heu.ksc.entity.UserRole;
 import com.heu.ksc.service.UserService;
 import com.heu.ksc.util.Md5Util;
 import com.heu.ksc.util.RedisUtils;
@@ -82,5 +83,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(Integer id) {
         userMapper.deleteUserById(id);
+    }
+
+    @Override
+    public UserRole selectUserRoleByUsername(String username) {
+        UserRole userRole = userRoleMapper.selectUserRoleByUsername(username);
+        return userRole;
     }
 }

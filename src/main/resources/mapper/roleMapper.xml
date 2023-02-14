@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.ksc.dao.RoleMapper">
+
+    <resultMap id="roleMap" type="com.heu.ksc.entity.Role">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="desc" column="desc"/>
+    </resultMap>
+
+    <select id="selectRoleList" resultMap="roleMap">
+        select id, code, name, is_deleted, `desc`
+        from role
+        where is_deleted = 0
+    </select>
+
+    <insert id="addRole" parameterType="com.heu.ksc.entity.Role">
+        insert into role (code, name, `desc`) values(#{code}, #{name}, #{desc})
+    </insert>
+
+    <select id="selectById" resultMap="roleMap">
+        select id, code, name, `desc`
+        from role
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <update id="editRole" parameterType="com.heu.ksc.entity.Role">
+        update role set name=#{name}, code=#{code}, `desc`=#{desc}
+        where id=#{id}
+    </update>
+
+    <update id="deleteRole">
+        update role set is_deleted = 1 where id = #{id}
+    </update>
+</mapper>

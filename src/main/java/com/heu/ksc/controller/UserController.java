@@ -3,6 +3,9 @@ package com.heu.ksc.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.heu.ksc.entity.User;
+import com.heu.ksc.entity.UserRole;
+import com.heu.ksc.service.RoleService;
+import com.heu.ksc.service.impl.RoleServiceImpl;
 import com.heu.ksc.service.impl.UserServiceImpl;
 import com.heu.ksc.util.AjaxResult;
 import com.heu.ksc.util.RedisUtils;
@@ -25,6 +28,8 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private RoleServiceImpl roleService;
     @Autowired
     private RedisUtils redisUtil;
 
@@ -124,5 +129,19 @@ public class UserController {
     public String deleteUserById(Integer id) {
         userService.deleteUserById(id);
         return JSON.toJSONString(AjaxResult.success("删除成功"));
+    }
+
+    @RequestMapping("/updateUserRole")
+    @ResponseBody
+    public String updateUserRole(@RequestBody UserRole userRole) {
+        roleService.updateUserRole(userRole);
+        return JSON.toJSONString(AjaxResult.success("分配成功"));
+    }
+
+    @RequestMapping("/selectUserRoleByUsername")
+    @ResponseBody
+    public String selectUserRoleByUsername(String username) {
+        UserRole userRole = userService.selectUserRoleByUsername(username);
+        return JSON.toJSONString(AjaxResult.success("查询成功",userRole));
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Menu extends BaseVo{
+public class Auth extends BaseVo{
 
     private Integer id;
 
@@ -20,6 +20,6 @@ public class Menu extends BaseVo{
     private Integer level;
 
     //
-    private List<Menu> children;
+    private List<Auth> children;
 
 }
