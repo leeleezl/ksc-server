@@ -14,7 +14,7 @@ public interface KnowledgeService {
 
     void updateById(Knowledge knowledge);
 
-    List<Knowledge> listCheck(Knowledge knowledge);
+    List<Knowledge> checkList(Knowledge knowledge);
 
     void edit(Knowledge knowledge);
 

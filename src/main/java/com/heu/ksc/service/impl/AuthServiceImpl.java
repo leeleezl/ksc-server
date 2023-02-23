@@ -4,13 +4,16 @@ import com.heu.ksc.dao.AuthMapper;
 import com.heu.ksc.entity.Auth;
 import com.heu.ksc.entity.User;
 import com.heu.ksc.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
@@ -45,6 +48,28 @@ public class AuthServiceImpl implements AuthService {
         List<Auth> auths = authMapper.menuList();
         List<Auth> authTree = buildAuthTree(auths, 0);
         return authTree;
+    }
+
+    @Override
+    public List<Integer> getThreeLevelAuth(Integer roleId) {
+        List<Auth> threeLevelAuth = authMapper.getThreeLevelAuth(roleId);
+        List<Integer> defKeys = new ArrayList<>();
+        for (Auth auth : threeLevelAuth) {
+            defKeys.add(auth.getId());
+        }
+        return defKeys;
+    }
+
+    @Override
+    public void setAuth(Map authMap) {
+        Integer roleId = (Integer) authMap.get("roleId");
+        String authIdStr = (String) authMap.get("authIds");
+        String[] split = authIdStr.split(",");
+        List<Integer> authIds = new ArrayList<>();
+        for (String s : split) {
+            authIds.add(Integer.valueOf(s));
+        }
+        authMapper.setAuth(roleId, authIds);
     }
 
     private List<Auth> buildAuthTree(List<Auth> AuthList, Integer pId) {

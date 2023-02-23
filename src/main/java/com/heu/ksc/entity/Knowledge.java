@@ -17,7 +17,7 @@ public class Knowledge extends BaseVo implements Serializable {
 
     private Integer userId;
 
-    private String k_name;
+    private String kName;
 
     private String abstractInfo;
 
@@ -25,7 +25,7 @@ public class Knowledge extends BaseVo implements Serializable {
 
     private Integer type;
 
-    private Integer status;    //0-审核中  1-审核通过  2-审核未通过
+    private Integer status;    //1-审核中  2-机器审核通过 3-人工审核通过 0-审核未通过
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -42,5 +42,7 @@ public class Knowledge extends BaseVo implements Serializable {
     private String keywords;
 
     private Double score;
+
+    private String username;  //作者
 
 }

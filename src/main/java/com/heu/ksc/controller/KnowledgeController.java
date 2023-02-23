@@ -49,10 +49,10 @@ public class KnowledgeController {
      * @param knowledge
      * @return
      */
-    @RequestMapping("/listCheck")
+    @RequestMapping("/checkList")
     @ResponseBody
     public String listCheckKnowledge(@RequestBody Knowledge knowledge) {
-        List<Knowledge> knowledgeList = knowledgeService.listCheck(knowledge);
+        List<Knowledge> knowledgeList = knowledgeService.checkList(knowledge);
         PageInfo<Knowledge> pageInfo = new PageInfo<>(knowledgeList);
         return JSON.toJSONString(AjaxResult.success("查询成功",pageInfo));
     }
@@ -65,7 +65,7 @@ public class KnowledgeController {
     @ResponseBody
     public String check(@RequestBody Knowledge knowledge) {
         knowledgeService.updateById(knowledge);
-        if(knowledge.getStatus() == 1) {
+        if(knowledge.getStatus() == 3) {
             return JSON.toJSONString(AjaxResult.success("审核通过"));
         } else {
             //TODO: 通知上传人
@@ -80,5 +80,15 @@ public class KnowledgeController {
         knowledgeService.edit(knowledge);
         return JSON.toJSONString(AjaxResult.success("修改成功，请等待审核"));
     }
+
+    @RequestMapping("/selectById")
+    @ResponseBody
+    public String selectById(Integer id) {
+        Knowledge knowledge = new Knowledge();
+        knowledge.setId(id);
+        Knowledge k = knowledgeService.selectById(knowledge);
+        return JSON.toJSONString(AjaxResult.success("查询成功", k));
+    }
+
 
 }

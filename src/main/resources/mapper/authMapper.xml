@@ -34,4 +34,17 @@
     <update id="deleteById">
         update auth set is_deleted = 1 where id = #{id}
     </update>
+    
+    <select id="getThreeLevelAuth" resultMap="menuMap">
+        SELECT a.id, a.name
+        FROM role r, auth a, role_auth ra
+        WHERE r.id = #{roleId} and r.id = ra.role_id and ra.auth_id = a.id AND a.level = 2
+    </select>
+
+    <insert id="setAuth">
+        insert into role_auth(role_id, auth_id) VALUES
+            <foreach collection="authIds" item="authId" separator=",">
+                (#{roleId}, #{authId})
+            </foreach>
+    </insert>
 </mapper>

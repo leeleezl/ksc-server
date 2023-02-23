@@ -18,7 +18,7 @@ public interface KnowledgeMapper {
 
    int updateById(Knowledge knowledge);
 
-   List<Knowledge> listCheck(Knowledge knowledge);
+   List<Knowledge> checkList(Knowledge knowledge);
 
    int edit(Knowledge knowledge);
 }

@@ -28,7 +28,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
     @Override
     public void add(Knowledge knowledge) {
-        knowledge.setStatus(0);   //审核中
+        knowledge.setStatus(1);   //审核中
         knowledge.setUserId(tokenUtil.getUserId());
         knowledgeMapper.insert(knowledge);
     }
@@ -44,9 +44,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     }
 
     @Override
-    public List<Knowledge> listCheck(Knowledge knowledge) {
+    public List<Knowledge> checkList(Knowledge knowledge) {
         PageHelper.startPage(knowledge.getPage(), knowledge.getSize());
-        return knowledgeMapper.listCheck(knowledge);
+        return knowledgeMapper.checkList(knowledge);
 
     }
 

@@ -5,17 +5,21 @@ import com.heu.ksc.entity.Auth;
 import com.heu.ksc.service.impl.AuthServiceImpl;
 import com.heu.ksc.util.AjaxResult;
 import com.heu.ksc.util.TokenUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/sys")
 @CrossOrigin
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -49,6 +53,20 @@ public class AuthController {
     public String getAuthTree() {
         List<Auth> authTree = authService.showAllAuthTree();
         return JSON.toJSONString(AjaxResult.success("查询成功",authTree));
+    }
+
+    @RequestMapping("/getThreeLevelAuth")
+    @ResponseBody
+    public String getThreeLevelAuth(Integer roleId) {
+        List<Integer> defKeys = authService.getThreeLevelAuth(roleId);
+        return JSON.toJSONString(AjaxResult.success("查询成功",defKeys));
+    }
+
+    @RequestMapping("/setAuth")
+    @ResponseBody
+    public String setAuth(@RequestBody Map authMap) {
+        authService.setAuth(authMap);
+        return JSON.toJSONString(AjaxResult.success("分配成功"));
     }
 
 }

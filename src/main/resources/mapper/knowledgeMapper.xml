@@ -5,7 +5,7 @@
     <resultMap id="knowledgeMap" type="com.heu.ksc.entity.Knowledge">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
-        <result property="k_name" column="k_name"/>
+        <result property="kName" column="k_name"/>
         <result property="abstractInfo" column="abstract"/>
         <result property="content" column="content"/>
         <result property="type" column="type"/>
@@ -16,6 +16,7 @@
         <result property="collectCount" column="collect_count"/>
         <result property="keywords" column="keywords"/>
         <result property="score" column="score"/>
+        <result property="username" column="username"/>
     </resultMap>
     <resultMap id="knowledgeVo" type="com.heu.ksc.entity.Knowledge">
         <result property="k_name" column="k_name"/>
@@ -30,10 +31,10 @@
 
 
     <sql id="insertFields">
-        user_id, k_name, abstract, content, type, status, valid_time, invalid_time, comment_count, collect_count, keywords,score
+        user_id, k_name, abstract, content, `type`, status, valid_time, invalid_time, comment_count, collect_count, keywords,score
     </sql>
     <sql id="selectFields">
-        id ,user_id, k_name, abstract, content, type, status, valid_time, invalid_time, comment_count, collect_count, keywords,score
+        id ,user_id, k_name, abstract, content, `type`, status, valid_time, invalid_time, comment_count, collect_count, keywords,score
     </sql>
     <select id="list" resultMap="knowledgeMap">
         select <include refid="selectFields"></include>
@@ -47,18 +48,37 @@
 
     </select>
 
+    <select id="checkList" resultMap="knowledgeMap">
+        select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,
+               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.username
+        from knowledge k, user u
+        where (status = 1 or status = 2) and k.user_id = u.id
+        <if test="queryKey != null and queryKey != '' ">
+            and (k.content like CONCAT('%',#{queryKey},'%')
+            or k.keywords like CONCAT('%',#{queryKey},'%')
+            or k.k_name like CONCAT('%',#{queryKey},'%'))
+        </if>
+    </select>
+
     <insert id="insert" parameterType="com.heu.ksc.entity.Knowledge">
         insert into knowledge (<include refid="insertFields"></include>)
         values (#{userId}, #{k_name}, #{abstractInfo}, #{content}, #{type}, #{status}, #{validTime}, #{invalidTime}, #{commentCount}, #{collectCount}, #{keywords}, #{score})
     </insert>
 
     <select id="selectById" resultMap="knowledgeMap">
-        select <include refid="selectFields"/> from knowledge where id = #{id}
+        select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,
+               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.username
+        from knowledge k, user u
+        where k.id = #{id} and k.user_id = u.id
     </select>
 
     <update id="updateById" parameterType="com.heu.ksc.entity.Knowledge">
         update knowledge set status = #{status}, valid_time = #{validTime}, invalid_time = #{invalidTime} where id = #{id}
     </update>
+
+<!--    <update id="check" parameterType="com.heu.ksc.entity.Knowledge">-->
+<!--        update knowledge set status = #{status} where id = #{id}-->
+<!--    </update>-->
 
 <!--    <select id="list" resultMap="knowledgeMap">-->
 <!--        select <include refid="selectFields"></include>-->

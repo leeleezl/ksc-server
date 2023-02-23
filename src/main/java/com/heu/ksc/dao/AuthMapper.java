@@ -18,6 +18,7 @@ public interface AuthMapper {
 
     int deleteById(@Param("id") Integer id);
 
+    List<Auth> getThreeLevelAuth(@Param("roleId") Integer roleId);
 
-
+    int setAuth(@Param("roleId") Integer roleId, @Param("authIds") List<Integer> authIds);
 }
