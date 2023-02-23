@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.heu.ksc.entity.Knowledge;
 import com.heu.ksc.service.KnowledgeService;
 import com.heu.ksc.util.AjaxResult;
+import com.heu.ksc.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,9 @@ public class KnowledgeController {
 
     @Autowired
     private KnowledgeService knowledgeService;
+
+    @Autowired
+    private TokenUtil tokenUtil;
 
     @RequestMapping("/list")
     public String listByPage(@RequestBody Knowledge knowledge) {
@@ -64,6 +68,7 @@ public class KnowledgeController {
     @RequestMapping("/check")
     @ResponseBody
     public String check(@RequestBody Knowledge knowledge) {
+        knowledge.setCheckedName(tokenUtil.getLoginUser().getUsername());
         knowledgeService.updateById(knowledge);
         if(knowledge.getStatus() == 3) {
             return JSON.toJSONString(AjaxResult.success("审核通过"));

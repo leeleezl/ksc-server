@@ -17,6 +17,8 @@
         <result property="keywords" column="keywords"/>
         <result property="score" column="score"/>
         <result property="username" column="username"/>
+        <result property="checkedName" column="checked_name"/>
+        <result property="errInfo" column="err_info"/>
     </resultMap>
     <resultMap id="knowledgeVo" type="com.heu.ksc.entity.Knowledge">
         <result property="k_name" column="k_name"/>
@@ -67,13 +69,16 @@
 
     <select id="selectById" resultMap="knowledgeMap">
         select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,
-               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.username
+               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.username, k.checked_name, k.err_info
         from knowledge k, user u
         where k.id = #{id} and k.user_id = u.id
     </select>
 
     <update id="updateById" parameterType="com.heu.ksc.entity.Knowledge">
-        update knowledge set status = #{status}, valid_time = #{validTime}, invalid_time = #{invalidTime} where id = #{id}
+        update knowledge set status = #{status}, valid_time = #{validTime}, invalid_time = #{invalidTime},
+                             abstract = #{abstractInfo}, content = #{content},
+                             keywords = #{keywords}, checked_name = #{checkedName}
+        where id = #{id}
     </update>
 
 <!--    <update id="check" parameterType="com.heu.ksc.entity.Knowledge">-->

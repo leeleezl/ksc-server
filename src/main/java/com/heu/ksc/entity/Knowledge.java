@@ -17,6 +17,7 @@ public class Knowledge extends BaseVo implements Serializable {
 
     private Integer userId;
 
+    @JSONField(name="kName")
     private String kName;
 
     private String abstractInfo;
@@ -43,6 +44,12 @@ public class Knowledge extends BaseVo implements Serializable {
 
     private Double score;
 
+    private String errInfo;
+
+    private String checkedName;
+
     private String username;  //作者
+
+
 
 }
