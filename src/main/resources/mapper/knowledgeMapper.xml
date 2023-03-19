@@ -21,7 +21,7 @@
         <result property="errInfo" column="err_info"/>
     </resultMap>
     <resultMap id="knowledgeVo" type="com.heu.ksc.entity.Knowledge">
-        <result property="k_name" column="k_name"/>
+        <result property="kName" column="k_name"/>
         <result property="abstractInfo" column="abstract"/>
         <result property="content" column="content"/>
         <result property="validTime" column="valid_time"/>
@@ -39,22 +39,26 @@
         id ,user_id, k_name, abstract, content, `type`, status, valid_time, invalid_time, comment_count, collect_count, keywords,score
     </sql>
     <select id="list" resultMap="knowledgeMap">
-        select <include refid="selectFields"></include>
-        from knowledge
-        where status = 1
+        select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,k.checked_name,
+        k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.real_name as username
+        from knowledge k, user u
+        where status = 3 and k.user_id = u.id and k.is_deleted = 0
         <if test="queryKey != null and queryKey != '' ">
             and (content like CONCAT('%',#{queryKey},'%')
             or keywords like CONCAT('%',#{queryKey},'%')
             or k_name like CONCAT('%',#{queryKey},'%'))
+        </if>
+        <if test="deptId != null and deptId != '' ">
+            and u.dept_id = #{deptId}
         </if>
 
     </select>
 
     <select id="checkList" resultMap="knowledgeMap">
         select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,
-               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.username
+               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.real_name as username
         from knowledge k, user u
-        where (status = 1 or status = 2) and k.user_id = u.id
+        where (status = 1 or status = 2) and k.user_id = u.id and k.is_deleted = 0
         <if test="queryKey != null and queryKey != '' ">
             and (k.content like CONCAT('%',#{queryKey},'%')
             or k.keywords like CONCAT('%',#{queryKey},'%')
@@ -64,14 +68,14 @@
 
     <insert id="insert" parameterType="com.heu.ksc.entity.Knowledge">
         insert into knowledge (<include refid="insertFields"></include>)
-        values (#{userId}, #{k_name}, #{abstractInfo}, #{content}, #{type}, #{status}, #{validTime}, #{invalidTime}, #{commentCount}, #{collectCount}, #{keywords}, #{score})
+        values (#{userId}, #{kName}, #{abstractInfo}, #{content}, #{type}, #{status}, #{validTime}, #{invalidTime}, #{commentCount}, #{collectCount}, #{keywords}, #{score})
     </insert>
 
     <select id="selectById" resultMap="knowledgeMap">
         select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,
-               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.username, k.checked_name, k.err_info
+               k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.real_name as username, k.checked_name, k.err_info
         from knowledge k, user u
-        where k.id = #{id} and k.user_id = u.id
+        where k.id = #{id} and k.user_id = u.id and k.is_deleted = 0
     </select>
 
     <update id="updateById" parameterType="com.heu.ksc.entity.Knowledge">
@@ -81,26 +85,10 @@
         where id = #{id}
     </update>
 
-<!--    <update id="check" parameterType="com.heu.ksc.entity.Knowledge">-->
-<!--        update knowledge set status = #{status} where id = #{id}-->
-<!--    </update>-->
-
-<!--    <select id="list" resultMap="knowledgeMap">-->
-<!--        select <include refid="selectFields"></include>-->
-<!--        from knowledge-->
-<!--        where status = 0-->
-<!--        <if test="queryKey != null and queryKey != '' ">-->
-<!--            and (content like CONCAT('%',#{queryKey},'%')-->
-<!--            or keywords like CONCAT('%',#{queryKey},'%')-->
-<!--            or k_name like CONCAT('%',#{queryKey},'%'))-->
-<!--        </if>-->
-
-<!--    </select>-->
-
     <update id="edit" parameterType="com.heu.ksc.entity.Knowledge">
         update knowledge set status = #{status}
-        <if test="k_name != null and k_name != ''">
-            ,k_name = #{k_name}
+        <if test="kName != null and kName != ''">
+            ,k_name = #{kName}
         </if>
         <if test="abstractInfo != null and abstractInfo != ''">
             ,abstract = #{abstractInfo}
@@ -114,4 +102,39 @@
         where id = #{id}
     </update>
 
+    <select id="getMyKnowledgeList" resultMap="knowledgeMap">
+        select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.valid_time,
+        k.comment_count, k.collect_count, k.keywords, u.real_name as username, k.status
+        from knowledge k, user u
+        where k.user_id = #{userId} and k.user_id = u.id and k.is_deleted = 0
+        <if test="queryKey != null and queryKey != '' ">
+            and (content like CONCAT('%',#{queryKey},'%')
+            or keywords like CONCAT('%',#{queryKey},'%')
+            or k_name like CONCAT('%',#{queryKey},'%'))
+        </if>
+    </select>
+
+    <update id="collect" parameterType="com.heu.ksc.entity.Knowledge">
+        update knowledge set collect_count = collect_count + 1 where id = #{id}
+    </update>
+
+    <update id="cancelCollect" parameterType="com.heu.ksc.entity.Knowledge">
+        update knowledge set collect_count = collect_count - 1 where id = #{id}
+    </update>
+
+    <select id="myCollectList" resultMap="knowledgeMap">
+        select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.valid_time,
+               k.comment_count, k.collect_count, k.keywords, u.real_name as username
+        from knowledge k, user u, user_collect uc
+        where k.id = uc.k_id and uc.user_id = #{userId} and k.user_id = u.id  and uc.is_deleted = 0 and k.is_deleted = 0
+        <if test="queryKey != null and queryKey != '' ">
+            and (content like CONCAT('%',#{queryKey},'%')
+            or keywords like CONCAT('%',#{queryKey},'%')
+            or k_name like CONCAT('%',#{queryKey},'%'))
+        </if>
+    </select>
+
+    <update id="deleteKnowledge" parameterType="java.lang.Integer">
+        update knowledge set is_deleted = 1 where id = #{id}
+    </update>
 </mapper>

@@ -81,7 +81,7 @@ public class KnowledgeController {
     @RequestMapping("/edit")
     @ResponseBody
     public String edit(@RequestBody Knowledge knowledge) {
-        knowledge.setStatus(0);
+        knowledge.setStatus(1);
         knowledgeService.edit(knowledge);
         return JSON.toJSONString(AjaxResult.success("修改成功，请等待审核"));
     }
@@ -95,5 +95,34 @@ public class KnowledgeController {
         return JSON.toJSONString(AjaxResult.success("查询成功", k));
     }
 
+    @RequestMapping("/myKnowledge")
+    @ResponseBody
+    public String getMyKnowledgeList(@RequestBody Knowledge knowledge) {
+        List<Knowledge> myKnowledgeList = knowledgeService.getMyKnowledgeList(knowledge);
+        PageInfo<Knowledge> myKnowledgePage = new PageInfo<>(myKnowledgeList);
+        return JSON.toJSONString(AjaxResult.success("查询成功",myKnowledgePage));
+    }
+
+    @RequestMapping("/collect")
+    @ResponseBody
+    public String collect(@RequestBody Knowledge knowledge) {
+        knowledgeService.collect(knowledge);
+        return JSON.toJSONString(AjaxResult.success("操作成功"));
+    }
+
+    @RequestMapping("/myCollect")
+    @ResponseBody
+    public String MyCollectList(@RequestBody Knowledge knowledge){
+        List<Knowledge> myCollectList = knowledgeService.myCollectList(knowledge);
+        PageInfo<Knowledge> myCollectPage = new PageInfo<>(myCollectList);
+        return JSON.toJSONString(AjaxResult.success("查询成功", myCollectPage));
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public String deleteKnowledge(Integer id) {
+        knowledgeService.deleteKnowledge(id);
+        return JSON.toJSONString(AjaxResult.success("删除成功"));
+    }
 
 }

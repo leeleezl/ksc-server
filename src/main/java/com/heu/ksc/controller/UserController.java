@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -61,9 +58,9 @@ public class UserController {
             String token = UUID.randomUUID().toString();
             //把token放入redis中
             redisUtil.set(token, loginUser, 15L, TimeUnit.MINUTES);
-            Map dataMap = new HashMap();
-            dataMap.put("loginUserName", loginUser.getUsername());
-            ajaxResult = new AjaxResult(true, token, dataMap);
+//            Map dataMap = new HashMap();
+//            dataMap.put("loginUserName", loginUser.getUsername());
+            ajaxResult = new AjaxResult(true, token, loginUser);
         } else {
             ajaxResult = new AjaxResult(false, "账号或密码错误");
         }

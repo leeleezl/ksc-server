@@ -10,4 +10,6 @@ public class BaseVo {
 
     private String queryKey;
 
+    private Integer deptId;
+
 }

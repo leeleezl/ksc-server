@@ -21,4 +21,14 @@ public interface KnowledgeMapper {
    List<Knowledge> checkList(Knowledge knowledge);
 
    int edit(Knowledge knowledge);
+
+   List<Knowledge> getMyKnowledgeList(Knowledge knowledge);
+
+   int collect(Knowledge knowledge);
+
+   int cancelCollect(Knowledge knowledge);
+
+   List<Knowledge> myCollectList(@Param("queryKey") String queryKey, @Param("userId") Integer userId);
+
+   int deleteKnowledge(@Param("id") Integer id);
 }

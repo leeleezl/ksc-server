@@ -1,5 +1,6 @@
 package com.heu.ksc.service;
 
+import com.heu.ksc.entity.Knowledge;
 import com.heu.ksc.entity.User;
 import com.heu.ksc.entity.UserRole;
 

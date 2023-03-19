@@ -17,7 +17,6 @@ public class Knowledge extends BaseVo implements Serializable {
 
     private Integer userId;
 
-    @JSONField(name="kName")
     private String kName;
 
     private String abstractInfo;
@@ -50,6 +49,7 @@ public class Knowledge extends BaseVo implements Serializable {
 
     private String username;  //作者
 
-
-
+    public String getkName() {
+        return kName;
+    }
 }

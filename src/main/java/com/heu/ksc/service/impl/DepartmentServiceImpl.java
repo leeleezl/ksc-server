@@ -18,7 +18,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<Department> allDept() {
         List<Department> deptList = departmentMapper.allDept();
-        List<Department> deptTree = buildDeptTree(deptList, 101);
+        List<Department> deptTree = buildDeptTree(deptList, 0);
         return deptTree;
     }
 

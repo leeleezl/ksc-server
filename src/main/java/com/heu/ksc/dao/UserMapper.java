@@ -1,9 +1,11 @@
 package com.heu.ksc.dao;
 
+import com.heu.ksc.entity.Knowledge;
 import com.heu.ksc.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -28,4 +30,10 @@ public interface UserMapper {
     int insertUserRole(Integer userId, Integer roleId);
 
     User selectByUsername(String username);
+
+    int collect(@Param("userId") Integer userId, @Param("kId") Integer kId, @Param("collectDate") Date collectDate);
+
+    int cancelCollect(@Param("userId") Integer userId, @Param("kId") Integer kId);
+
+    int isCollected(@Param("userId") Integer userId, @Param("kId") Integer kId);
 }

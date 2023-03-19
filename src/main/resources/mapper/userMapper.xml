@@ -13,6 +13,7 @@
         <result property="deptId" column="dept_id"/>
         <result property="roleName" column="role_name"/>
         <result property="deptName" column="dept_name"/>
+        <result property="roleId" column="role_id"/>
         <result property="state" column="state"/>
     </resultMap>
     <sql id="insertFields">
@@ -35,9 +36,9 @@
     </select>
 
     <select id="login" resultMap="userMap">
-        select <include refid="selectFields"/>
-        from user
-        where username = #{username} and password = #{password} and is_delete = 0
+        select u.id, u.username, ur.role_id
+        from user u, user_role ur
+        where u.username = #{username} and u.password = #{password} and u.is_delete = 0 and u.username = ur.username
     </select>
 
     <select id="users" resultMap="userMap">
@@ -83,5 +84,16 @@
         update user set is_delete = 1 where id = #{id}
     </update>
 
+    <insert id="collect">
+        insert into user_collect(user_id, k_id, collect_date) values (#{userId}, #{kId}, #{collectDate})
+    </insert>
+
+    <update id="cancelCollect">
+        update user_collect set is_deleted = 1 where user_id = #{userId} and k_id = #{kId} and is_deleted = 0
+    </update>
+
+    <select id="isCollected" resultType="java.lang.Integer">
+        select count(*) from user_collect where user_id = #{userId} and k_id = #{kId} and is_deleted = 0
+    </select>
 
 </mapper>

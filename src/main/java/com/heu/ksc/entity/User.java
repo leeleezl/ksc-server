@@ -32,5 +32,7 @@ public class User extends BaseVo implements Serializable {
     private String roleName;
     //
     private String deptName;
+    //
+    private Integer roleId;
 
 }

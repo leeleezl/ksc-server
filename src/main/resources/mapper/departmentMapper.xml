@@ -8,11 +8,11 @@
         <result property="pId" column="p_id"/>
         <result property="ancestors" column="ancestors"/>
         <result property="level" column="level"/>
+        <result property="path" column="path"/>
     </resultMap>
     <select id="allDept" resultMap="deptMap">
-        select id, dept_name, p_id, ancestors, level
-        from department
+        select id, dept_name, p_id, ancestors, level, path
+        from department where is_deleted = 0
         order by level ASC
     </select>
-
 </mapper>

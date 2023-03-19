@@ -17,6 +17,8 @@ public class Department extends BaseVo {
 
     private Integer level;
 
+    private String path;
+
     private List<Department> children;
 
 }

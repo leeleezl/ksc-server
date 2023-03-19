@@ -2,6 +2,7 @@ package com.heu.ksc.service;
 
 import com.heu.ksc.entity.Knowledge;
 
+import java.beans.IntrospectionException;
 import java.util.List;
 
 public interface KnowledgeService {
@@ -18,4 +19,13 @@ public interface KnowledgeService {
 
     void edit(Knowledge knowledge);
 
+    List<Knowledge> getMyKnowledgeList(Knowledge knowledge);
+
+    void collect(Knowledge knowledge);
+
+    void cancelCollect(Knowledge knowledge);
+
+    List<Knowledge> myCollectList(Knowledge knowledge);
+
+    void deleteKnowledge(Integer id);
 }
