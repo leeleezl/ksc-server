@@ -43,11 +43,16 @@ public class Knowledge extends BaseVo implements Serializable {
 
     private String errInfo;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date preTime;  //预计上架时间
+
     private String checkedName;
 
     private String username;  //作者
 
     private List<Comment> commentList;
+
 
     public String getkName() {
         return kName;

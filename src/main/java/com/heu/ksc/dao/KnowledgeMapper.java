@@ -5,6 +5,7 @@ import com.heu.ksc.entity.Knowledge;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -35,4 +36,6 @@ public interface KnowledgeMapper {
    List<Knowledge> getMyMistakeKnowledge(Knowledge knowledge);
 
    int addCommentCount(@Param("knowledgeId") Integer knowledgeId);
+
+   List<Knowledge> autoValidList(@Param("validTime")Date validTime);
 }
