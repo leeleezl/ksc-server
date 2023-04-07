@@ -103,5 +103,18 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         knowledgeMapper.deleteKnowledge(id);
     }
 
+    @Override
+    public List<Knowledge> getMyMistakeKnowledge(Knowledge knowledge) {
+        Integer userId = tokenUtil.getUserId();
+        knowledge.setUserId(userId);
+        PageHelper.startPage(knowledge.getPage(), knowledge.getSize());
+        List<Knowledge> myKnowledgeList = knowledgeMapper.getMyMistakeKnowledge(knowledge);
+        return myKnowledgeList;
+    }
+
+    @Override
+    public void addCommentCount(Integer knowledgeId) {
+        knowledgeMapper.addCommentCount(knowledgeId);
+    }
 
 }

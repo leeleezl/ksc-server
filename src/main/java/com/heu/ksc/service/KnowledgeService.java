@@ -28,4 +28,8 @@ public interface KnowledgeService {
     List<Knowledge> myCollectList(Knowledge knowledge);
 
     void deleteKnowledge(Integer id);
+
+    List<Knowledge> getMyMistakeKnowledge(Knowledge knowledge);
+
+    void addCommentCount(Integer knowledgeId);
 }

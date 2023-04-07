@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.ksc.dao.CommentMapper">
+    <resultMap id="commentMap" type="com.heu.ksc.entity.Comment">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="entityType" column="entity_type"/>
+        <result property="entityId" column="entity_id"/>
+        <result property="targetId" column="target_id"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="username" column="username"/>
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+    <sql id = "selectFields">
+        id, user_id, entity_type, entity_id, target_id, content, create_time
+    </sql>
+
+    <insert id="addComment" parameterType="com.heu.ksc.entity.Comment">
+        insert into comment(user_id, entity_type, entity_id, target_id, content, create_time)
+        values (#{userId}, #{entityType}, #{entityId}, #{targetId}, #{content}, #{createTime})
+    </insert>
+
+    <select id="getCommentByEntity" resultMap="commentMap">
+        select c.id, c.user_id, c.entity_type, c.entity_id, c.target_id, c.content, c.create_time,u.real_name as username, d.dept_name
+        from comment c, user u, department d
+        where c.is_deleted = 0 and u.id = c.user_id and u.dept_id = d.id
+        and c.entity_type = #{entityType}
+        and c.entity_id = #{entityId}
+        order by c.create_time asc
+    </select>
+</mapper>

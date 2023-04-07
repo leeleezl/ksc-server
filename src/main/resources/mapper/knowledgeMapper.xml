@@ -99,6 +99,9 @@
         <if test="keywords != null and keywords != ''">
             ,keywords = #{keywords}
         </if>
+        <if test="errInfo != null and errInfo != ''">
+            ,err_info = #{errInfo}
+        </if>
         where id = #{id}
     </update>
 
@@ -136,5 +139,21 @@
 
     <update id="deleteKnowledge" parameterType="java.lang.Integer">
         update knowledge set is_deleted = 1 where id = #{id}
+    </update>
+
+    <select id="getMyMistakeKnowledge" resultMap="knowledgeMap">
+        select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.valid_time,
+        k.comment_count, k.collect_count, k.keywords, u.real_name as username, k.status, k.err_info
+        from knowledge k, user u
+        where k.user_id = #{userId} and k.user_id = u.id and k.is_deleted = 0 and k.status = 4
+        <if test="queryKey != null and queryKey != '' ">
+            and (content like CONCAT('%',#{queryKey},'%')
+            or keywords like CONCAT('%',#{queryKey},'%')
+            or k_name like CONCAT('%',#{queryKey},'%'))
+        </if>
+    </select>
+
+    <update id="addCommentCount" parameterType="java.lang.Integer">
+        update knowledge set comment_count = comment_count + 1 where id = #{knowledgeId}
     </update>
 </mapper>

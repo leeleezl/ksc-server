@@ -1,8 +1,11 @@
 package com.heu.ksc.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Comment {
@@ -19,8 +22,18 @@ public class Comment {
 
     private String content;
 
-    private Integer status;
+    private boolean isDeleted;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    private List<Comment> replyList;
+
+    private String username;
+
+    private String targetUser;
+
+    private String deptName;
 
 }

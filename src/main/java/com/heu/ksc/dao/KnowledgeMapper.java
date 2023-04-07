@@ -31,4 +31,8 @@ public interface KnowledgeMapper {
    List<Knowledge> myCollectList(@Param("queryKey") String queryKey, @Param("userId") Integer userId);
 
    int deleteKnowledge(@Param("id") Integer id);
+
+   List<Knowledge> getMyMistakeKnowledge(Knowledge knowledge);
+
+   int addCommentCount(@Param("knowledgeId") Integer knowledgeId);
 }

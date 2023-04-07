@@ -57,7 +57,7 @@ public class UserController {
             //生成token
             String token = UUID.randomUUID().toString();
             //把token放入redis中
-            redisUtil.set(token, loginUser, 15L, TimeUnit.MINUTES);
+            redisUtil.set(token, loginUser, 60L, TimeUnit.MINUTES);
 //            Map dataMap = new HashMap();
 //            dataMap.put("loginUserName", loginUser.getUsername());
             ajaxResult = new AjaxResult(true, token, loginUser);

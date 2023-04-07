@@ -1,15 +1,18 @@
 package com.heu.ksc.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.heu.ksc.entity.Comment;
 import com.heu.ksc.entity.Knowledge;
 import com.heu.ksc.service.KnowledgeService;
+import com.heu.ksc.service.impl.CommentServiceImpl;
+import com.heu.ksc.service.impl.UserServiceImpl;
 import com.heu.ksc.util.AjaxResult;
 import com.heu.ksc.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.heu.ksc.util.KscConstant;
 
 import java.util.List;
 
@@ -24,6 +27,12 @@ public class KnowledgeController {
 
     @Autowired
     private TokenUtil tokenUtil;
+
+    @Autowired
+    private CommentServiceImpl commentService;
+
+    @Autowired
+    private UserServiceImpl userService;
 
     @RequestMapping("/list")
     public String listByPage(@RequestBody Knowledge knowledge) {
@@ -92,6 +101,17 @@ public class KnowledgeController {
         Knowledge knowledge = new Knowledge();
         knowledge.setId(id);
         Knowledge k = knowledgeService.selectById(knowledge);
+        // TODO 获取当前用户收藏状态
+        //帖子评论列表
+        List<Comment> commentList = commentService.getCommentByEntity(KscConstant.ENTITY_TYPE_KNOWLEDGE, id);
+        if (!commentList.isEmpty()) {
+            k.setCommentList(commentList);
+            //回复
+            for (Comment comment : commentList) {
+                List<Comment> replyList = commentService.getCommentByEntity(KscConstant.ENTITY_TYPE_COMMENT, comment.getId());
+                comment.setReplyList(replyList);
+            }
+        }
         return JSON.toJSONString(AjaxResult.success("查询成功", k));
     }
 
@@ -123,6 +143,14 @@ public class KnowledgeController {
     public String deleteKnowledge(Integer id) {
         knowledgeService.deleteKnowledge(id);
         return JSON.toJSONString(AjaxResult.success("删除成功"));
+    }
+
+    @RequestMapping("/misList")
+    @ResponseBody
+    public String getMyMistakeKnowledge(@RequestBody Knowledge knowledge) {
+        List<Knowledge> myMistakeKnowledge = knowledgeService.getMyMistakeKnowledge(knowledge);
+        PageInfo<Knowledge> myMistakeKnowledgePage = new PageInfo<>(myMistakeKnowledge);
+        return JSON.toJSONString(AjaxResult.success("查询成功",myMistakeKnowledgePage));
     }
 
 }
