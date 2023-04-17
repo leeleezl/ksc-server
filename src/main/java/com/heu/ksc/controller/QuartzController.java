@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.heu.ksc.entity.QuartzBean;
 import com.heu.ksc.service.impl.QuartzServiceImpl;
 import com.heu.ksc.util.AjaxResult;
+import com.heu.ksc.util.KscConstant;
 import com.heu.ksc.util.QuartzUtils;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class QuartzController {
             quartzBean.setJobClass(quartzBean.getJobClass());
             quartzBean.setJobName(quartzBean.getJobName());
             quartzBean.setCronExpression(quartzBean.getCronExpression());  //"*/10 * * * * ?"
+            quartzBean.setStatus(KscConstant.RUNNING);
             quartzService.insertJob(quartzBean);
             QuartzUtils.createScheduleJob(scheduler,quartzBean);
         } catch (Exception e) {
@@ -45,9 +47,10 @@ public class QuartzController {
     @RequestMapping("/pauseJob")
     @ResponseBody
     @Transactional
-    public String  pauseJob(@RequestBody QuartzBean quartzBean)  {
+    public String pauseJob(@RequestBody QuartzBean quartzBean)  {
         try {
             QuartzUtils.pauseScheduleJob (scheduler, quartzBean.getJobName());
+            quartzBean.setStatus(KscConstant.PAUSE);
             quartzService.updateJob(quartzBean);
         } catch (Exception e) {
             return JSON.toJSONString(AjaxResult.success("暂停失败"));
@@ -73,6 +76,7 @@ public class QuartzController {
     public String resume(@RequestBody QuartzBean quartzBean)  {
         try {
             QuartzUtils.resumeScheduleJob(scheduler, quartzBean.getJobName());
+            quartzBean.setStatus(KscConstant.RUNNING);
             quartzService.updateJob(quartzBean);
         } catch (Exception e) {
             return JSON.toJSONString(AjaxResult.success("启动失败"));
@@ -103,7 +107,7 @@ public class QuartzController {
     public  String delete(@RequestBody QuartzBean quartzBean) {
         try {
             QuartzUtils.deleteScheduleJob(scheduler, quartzBean.getJobName());
-            //quartzService.updateJob(quartzBean);
+            quartzService.updateJob(quartzBean);
         } catch (Exception e) {
             return JSON.toJSONString(AjaxResult.success("删除失败"));
         }

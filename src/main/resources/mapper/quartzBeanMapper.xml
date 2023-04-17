@@ -35,7 +35,7 @@
     <update id="updateJob" parameterType="com.heu.ksc.entity.QuartzBean">
         update quartz_bean set description = #{description}, job_name = #{jobName}, job_class = #{jobClass},
                                cron_expression = #{cronExpression}, status = #{status}, create_user = #{createUser},
-                               create_time = #{createTime}, update_user = #{updateUser}, update_time = #{updateTime}
+                               create_time = #{createTime}, update_user = #{updateUser}, update_time = #{updateTime} where id = #{id}
     </update>
 
 </mapper>

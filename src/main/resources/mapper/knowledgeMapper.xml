@@ -43,7 +43,7 @@
         select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,k.checked_name,
         k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.real_name as username
         from knowledge k, user u
-        where status = 4 and k.user_id = u.id and k.is_deleted = 0
+        where status = 4  and k.user_id = u.id and k.is_deleted = 0
         <if test="queryKey != null and queryKey != '' ">
             and (content like CONCAT('%',#{queryKey},'%')
             or keywords like CONCAT('%',#{queryKey},'%')
@@ -59,7 +59,7 @@
         select k.id, k.user_id, k.k_name, k.abstract, k.content, k.type, k.status, k.valid_time,
                k.invalid_time, k.comment_count, k.collect_count, k.keywords,k.score, u.real_name as username
         from knowledge k, user u
-        where (status = 1 or status = 2) and k.user_id = u.id and k.is_deleted = 0
+        where status = 2 and k.user_id = u.id and k.is_deleted = 0
         <if test="queryKey != null and queryKey != '' ">
             and (k.content like CONCAT('%',#{queryKey},'%')
             or k.keywords like CONCAT('%',#{queryKey},'%')
@@ -159,6 +159,14 @@
     </update>
 
     <select id="autoValidList" resultMap="knowledgeMap">
-        select * from konwledge where status = 3 and valid_time &lt;= #{validTime}
+        select * from knowledge where status = 3 and valid_time &lt;= #{validTime}
+    </select>
+
+    <select id="selectNew" resultMap="knowledgeMap">
+        select id, k_name, abstract, content from knowledge where status = 1 and is_deleted = 0
+    </select>
+
+    <select id="autoInvalidList" resultMap="knowledgeMap">
+        select * from knowledge where status = 4
     </select>
 </mapper>

@@ -7,6 +7,7 @@ import com.heu.ksc.entity.Knowledge;
 import com.heu.ksc.service.KnowledgeService;
 import com.heu.ksc.service.UserService;
 import com.heu.ksc.util.RedisUtils;
+import com.heu.ksc.util.SensitiveFilter;
 import com.heu.ksc.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -26,6 +27,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
     @Autowired
     private UserMapper userMapper;
+
 
     @Override
     public List<Knowledge> list(Knowledge knowledge) {

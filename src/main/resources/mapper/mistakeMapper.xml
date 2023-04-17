@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.ksc.dao.MistakeMapper">
+
+    <resultMap id="mistakeMap" type="com.heu.ksc.entity.Mistake">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="uId" column="u_id"/>
+        <result property="kId" column="k_id"/>
+        <result property="user" column="user"/>
+        <result property="title" column="title"/>
+    </resultMap>
+
+    <insert id="addMistake" parameterType="com.heu.ksc.entity.Mistake">
+        insert into mistake (content, u_id, k_id) values (#{content}, #{uId}, #{kId})
+    </insert>
+
+</mapper>

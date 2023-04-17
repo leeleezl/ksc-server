@@ -79,7 +79,7 @@ public class KnowledgeController {
     public String check(@RequestBody Knowledge knowledge) {
         knowledge.setCheckedName(tokenUtil.getLoginUser().getUsername());
         knowledgeService.updateById(knowledge);
-        if(knowledge.getStatus() == 3) {
+        if(knowledge.getStatus() == KscConstant.PEO_PASS) {
             return JSON.toJSONString(AjaxResult.success("审核通过"));
         } else {
             //TODO: 通知上传人

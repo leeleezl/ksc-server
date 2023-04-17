@@ -38,4 +38,8 @@ public interface KnowledgeMapper {
    int addCommentCount(@Param("knowledgeId") Integer knowledgeId);
 
    List<Knowledge> autoValidList(@Param("validTime")Date validTime);
+
+   List<Knowledge> selectNew();
+
+   List<Knowledge> autoInvalidList();
 }
